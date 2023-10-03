@@ -60,7 +60,7 @@ productos.forEach((producto) => {
     boton.addEventListener("click", agregarAlCarrito)
 
     function agregarAlCarrito() {
-        carrito.push(boton)
+        carrito.push(producto)
         console.log(carrito)
 
         let json_transformar = JSON.stringify(carrito);
@@ -68,13 +68,29 @@ productos.forEach((producto) => {
     }
 
     function mostrarCarrito() {
-        if (JSON.parse(sessionStorage.getItem("carrito"))) {
-            carritoEnUso = JSON.parse(sessionStorage.getItem("carrito"))
-            console.log(carritoEnUso)
+
+        const carritoEnUso = JSON.parse(sessionStorage.getItem("carrito"))
+
+        const contenedorCarrito = document.getElementById("contenedorCarrito")
+
+        let cartHTML = '';
+
+        if (carritoEnUso && carritoEnUso.length > 0) {
+
+            cartHTML += '<h3>Carrito de Compras</h3>';
+            cartHTML += '<ul>';
+            carritoEnUso.forEach((producto) => {
+                cartHTML += `<li>${producto.marca} - ${producto.modelo} - Precio: $${producto.precio}</li>`;
+            });
+            cartHTML += '</ul>';
+        } else {
+
+            cartHTML = '<p>El carrito está vacío.</p>';
         }
 
+        contenedorCarrito.innerHTML = cartHTML;
     }
-    //mostrarCarrito();
+    mostrarCarrito();
 })
 
 
