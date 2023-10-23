@@ -1,50 +1,17 @@
-const productos = [
-    {
-        modelo: "A20",
-        marca: "Ainner",
-        precio: 50000,
-        img: "img/gallery01.jpg",
-    },
-    {
-        modelo: "A30",
-        marca: "Ainner",
-        precio: 52000,
-        img: "img/gallery02.jpg",
-    },
-    {
-        modelo: "S10",
-        marca: "Snauwaert",
-        precio: 60000,
-        img: "img/gallery03.jpg",
-    },
-    {
-        modelo: "S20",
-        marca: "Snauwaert",
-        precio: 62000,
-        img: "img/gallery04.jpg",
-    },
-    {
-        modelo: "S30",
-        marca: "Snauwaert",
-        precio: 65000,
-        img: "img/gallery05.jpg",
-    },
-    {
-        modelo: "S40",
-        marca: "Snauwaert",
-        precio: 68000,
-        img: "img/gallery06.jpg",
-    },
-];
+const URL = "productos.json"
 
-const carrito = [];
+const carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
 const contenedor = document.getElementById("contenedorProductos");
 
-productos.forEach((producto) => {
-    let contenedorIndividual = document.createElement("div")
+const pedirProductos = async () => {
+    const respuesta = await fetch(URL)
+    const productos = await respuesta.json()
 
-    contenedorIndividual.innerHTML = `<div class="card" style="width: 18rem;">
+    productos.forEach((producto) => {
+        let contenedorIndividual = document.createElement("div")
+
+        contenedorIndividual.innerHTML = `<div class="card" style="width: 18rem;">
 <img src="${producto.img}" class="card-img-top" alt="...">
 <div class="card-body">
   <h5 class="card-title">${producto.marca}</h5>
@@ -54,43 +21,51 @@ productos.forEach((producto) => {
 </div>
 </div>`
 
-    contenedor.appendChild(contenedorIndividual)
+        contenedor.appendChild(contenedorIndividual)
 
-    let boton = document.getElementById(`agregar${producto.modelo}`);
-    boton.addEventListener("click", agregarAlCarrito)
-
-    function agregarAlCarrito() {
-        carrito.push(producto)
-        console.log(carrito)
+        let boton = document.getElementById(`agregar${producto.modelo}`);
+        boton.addEventListener("click", agregarAlCarrito)
+        boton.addEventListener("click", () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto agregado',
+                text: 'El producto fue agregado a tu carrito',
+            })
+        })
+    })
+    function agregarAlCarrito(event) {
+        const productId = event.target.id.replace("agregar", "");
+        const producto = productos.find((p) => p.modelo === productId);
+        carrito.push(producto);
+        console.log(carrito);
 
         let json_transformar = JSON.stringify(carrito);
         sessionStorage.setItem("carrito", json_transformar);
     }
+}
 
-    function mostrarCarrito() {
+function mostrarCarrito() {
 
-        const carritoEnUso = JSON.parse(sessionStorage.getItem("carrito"))
+    const carritoEnUso = JSON.parse(sessionStorage.getItem("carrito"))
 
-        const contenedorCarrito = document.getElementById("contenedorCarrito")
+    const contenedorCarrito = document.getElementById("contenedorCarrito")
 
-        let cartHTML = '';
+    let cartHTML = '';
 
-        if (carritoEnUso && carritoEnUso.length > 0) {
+    if (carritoEnUso && carritoEnUso.length > 0) {
 
-            cartHTML += '<h3>Carrito de Compras</h3>';
-            cartHTML += '<ul>';
-            carritoEnUso.forEach((producto) => {
-                cartHTML += `<li>${producto.marca} - ${producto.modelo} - Precio: $${producto.precio}</li>`;
-            });
-            cartHTML += '</ul>';
-        } else {
+        cartHTML += '<h3>Carrito de Compras</h3>';
+        cartHTML += '<ul>';
+        carritoEnUso.forEach((producto) => {
+            cartHTML += `<li>${producto.marca} - ${producto.modelo} - Precio: $${producto.precio}</li>`;
+        });
+        cartHTML += '</ul>';
+    } else {
 
-            cartHTML = '<p>El carrito está vacío.</p>';
-        }
-
-        contenedorCarrito.innerHTML = cartHTML;
+        cartHTML = '<p>El carrito está vacío.</p>';
     }
-    mostrarCarrito();
-})
 
-
+    contenedorCarrito.innerHTML = cartHTML;
+}
+pedirProductos();
+mostrarCarrito();

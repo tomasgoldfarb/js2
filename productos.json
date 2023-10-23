@@ -1,0 +1,38 @@
+[
+    {
+        "modelo": "A20",
+        "marca": "Ainner",
+        "precio": 50000,
+        "img": "img/gallery01.jpg"
+    },
+    {
+        "modelo": "A30",
+        "marca": "Ainner",
+        "precio": 52000,
+        "img": "img/gallery02.jpg"
+    },
+    {
+        "modelo": "S10",
+        "marca": "Snauwaert",
+        "precio": 60000,
+        "img": "img/gallery03.jpg"
+    },
+    {
+        "modelo": "S20",
+        "marca": "Snauwaert",
+        "precio": 62000,
+        "img": "img/gallery04.jpg"
+    },
+    {
+        "modelo": "S30",
+        "marca": "Snauwaert",
+        "precio": 65000,
+        "img": "img/gallery05.jpg"
+    },
+    {
+        "modelo": "S40",
+        "marca": "Snauwaert",
+        "precio": 68000,
+        "img": "img/gallery06.jpg"
+    }
+]
