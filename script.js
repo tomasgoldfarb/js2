@@ -4,6 +4,11 @@ const carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
 const contenedor = document.getElementById("contenedorProductos");
 
+const botonComprar = document.createElement("button");
+botonComprar.innerHTML = `<button type="button" class="btn btn-primary">Comprar</button>`
+botonComprar.addEventListener("click", comprar);
+document.body.appendChild(botonComprar);
+
 const botonVaciarCarrito = document.createElement("button");
 botonVaciarCarrito.innerHTML = `<button type="button" class="btn btn-primary">Vaciar carrito</button>`
 botonVaciarCarrito.addEventListener("click", vaciarCarrito);
@@ -46,6 +51,7 @@ const pedirProductos = async () => {
 
         let json_transformar = JSON.stringify(carrito);
         sessionStorage.setItem("carrito", json_transformar);
+        mostrarCarrito();
     }
 }
 
@@ -89,6 +95,28 @@ function vaciarCarrito() {
             Swal.fire(
                 'Tu carrito ha sido borrado',
                 'Podés volver a iniciar tu proceso de compra.',
+                'success'
+            )
+        }
+    })
+}
+function comprar() {
+    Swal.fire({
+        title: '¿Confirmás la compra?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí!',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sessionStorage.removeItem("carrito");
+            carrito.length = 0;
+            mostrarCarrito();
+            Swal.fire(
+                'Tu pedido ha sido enviado',
+                'Te llegará un e-mail con los detalles de tu pedido.',
                 'success'
             )
         }
